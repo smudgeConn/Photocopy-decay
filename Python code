@@ -1,0 +1,47 @@
+def generation_loss(orig, copy):
+    other_chars = '?!'
+
+    if len(orig) != len(copy):
+        return False
+
+    def char_score(char):
+        score = 0
+        if char.isupper():
+            score = 7
+        if char.islower():
+            score = 6
+        if char == '#':
+            score = 5
+        if char == "+":
+            score = 4
+        if char == ':':
+            score = 3
+        if char == ".":
+            score = 2
+        if char == " ":
+            score = 1
+        if char in other_chars:
+            score = 0        
+        return score
+    
+    for i, char in enumerate(orig):
+        if orig[i].isalpha() and copy[i].isalpha():
+            if orig[i].lower() != copy[i].lower():
+                return False
+        if orig[i] in other_chars:
+            if orig[i] != copy[i]:
+                return False
+        if char_score(orig[i]) < char_score(copy[i]):
+            return False
+    
+    def counts(string):
+        number_count = 0
+        for character in string:
+            if character.isdigit():
+                number_count += 1
+        return number_count
+    
+    if counts(orig) != counts(copy):
+        return False
+    
+    return True
